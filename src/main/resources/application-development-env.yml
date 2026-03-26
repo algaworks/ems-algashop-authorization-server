@@ -16,7 +16,7 @@ spring:
                 - products:write
             token:
               access-token-time-to-live: 15m
-              access-token-format: reference # Opaco
+              access-token-format: self-contained # JWT
           algashop-ordering-service-client:
             registration:
               client-id: algashop-ordering-service
