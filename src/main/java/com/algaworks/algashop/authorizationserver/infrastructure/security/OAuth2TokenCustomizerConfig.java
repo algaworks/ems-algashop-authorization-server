@@ -24,7 +24,7 @@ public class OAuth2TokenCustomizerConfig {
 				OidcUserInfo oidcUserInfo = loadUserInfo(context);
 				context.getClaims().claims(claims -> claims.putAll(oidcUserInfo.getClaims()));
 			} else if (OAuth2TokenType.ACCESS_TOKEN.getValue().equals(tokenType)
-				&& AuthorizationGrantType.AUTHORIZATION_CODE.equals(context.getAuthorizationGrantType())) {
+				&& !AuthorizationGrantType.CLIENT_CREDENTIALS.equals(context.getAuthorizationGrantType())) {
 				OidcUserInfo oidcUserInfo = loadUserInfo(context);
 				context.getClaims().subject(oidcUserInfo.getSubject());
 			}
