@@ -20,20 +20,39 @@ public class OAuth2TokenCustomizerConfig {
 	public OAuth2TokenCustomizer<JwtEncodingContext> tokenCustomizer() {
 		return context -> {
 			String tokenType = context.getTokenType().getValue();
-			if (OidcParameterNames.ID_TOKEN.equals(tokenType)) {
-				OidcUserInfo oidcUserInfo = loadUserInfo(context);
+			AuthorizationGrantType authorizationGrantType = context.getAuthorizationGrantType();
+			if (isIdToken(tokenType)) {
+				OidcUserInfo oidcUserInfo = loadUser(context);
 				context.getClaims().claims(claims -> claims.putAll(oidcUserInfo.getClaims()));
-			} else if (OAuth2TokenType.ACCESS_TOKEN.getValue().equals(tokenType)
-				&& !AuthorizationGrantType.CLIENT_CREDENTIALS.equals(context.getAuthorizationGrantType())) {
-				OidcUserInfo oidcUserInfo = loadUserInfo(context);
-				context.getClaims().subject(oidcUserInfo.getSubject());
-			}
-		};
+			} else if (isAccessToken(tokenType) &&
+					(isAuthCodeFlow(authorizationGrantType)
+					|| isRefreshTokenFlow(authorizationGrantType))
+				) {
+					OidcUserInfo oidcUserInfo = loadUser(context);
+					context.getClaims().subject(oidcUserInfo.getSubject());
+				}
+			};
+		}
+
+	private boolean isRefreshTokenFlow(AuthorizationGrantType authorizationGrantType) {
+		return AuthorizationGrantType.REFRESH_TOKEN.equals(authorizationGrantType);
 	}
 
-	private OidcUserInfo loadUserInfo(JwtEncodingContext context) {
+	private boolean isAuthCodeFlow(AuthorizationGrantType authorizationGrantType) {
+		return AuthorizationGrantType.AUTHORIZATION_CODE.equals(authorizationGrantType);
+	}
+
+	private OidcUserInfo loadUser(JwtEncodingContext context) {
 		String email = context.getPrincipal().getName();
 		return oidcUserInfoService.loadUser(email);
+	}
+
+	private boolean isAccessToken(String tokenType) {
+		return OAuth2TokenType.ACCESS_TOKEN.getValue().equals(tokenType);
+	}
+
+	private boolean isIdToken(String tokenType) {
+		return OidcParameterNames.ID_TOKEN.equals(tokenType);
 	}
 
 }
