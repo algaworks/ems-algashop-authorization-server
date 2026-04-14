@@ -2,7 +2,6 @@ package com.algaworks.algashop.authorizationserver.infrastructure.security;
 
 import com.algaworks.algashop.authorizationserver.infrastructure.security.oidc.OidcUserInfoMapper;
 import lombok.RequiredArgsConstructor;
-import org.ietf.jgss.Oid;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;

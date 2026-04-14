@@ -12,10 +12,10 @@ import java.util.List;
 public class JdbcOAuth2AuthorizationQueryService implements OAuth2AuthorizationQueryService {
 
 	private final JdbcOperations jdbcOperations;
-	private final String sql = "SELECT id FROM oauth2_authorization WHERE principal_name = ?";
+	private static final String SQL = "SELECT id FROM oauth2_authorization WHERE principal_name = ?";
 
 	@Override
 	public List<String> findAuthorizationIds(String principalName) {
-		return jdbcOperations.queryForList(sql, String.class, principalName);
+		return jdbcOperations.queryForList(SQL, String.class, principalName);
 	}
 }
