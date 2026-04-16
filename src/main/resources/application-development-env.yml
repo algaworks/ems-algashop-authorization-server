@@ -42,6 +42,8 @@ spring:
                 - customers:write
                 - shopping-carts:read
                 - shopping-carts:write
+                - users:read
+                - users:write
             token:
               access-token-time-to-live: 15m
               access-token-format: self-contained # JWT
