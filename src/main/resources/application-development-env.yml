@@ -142,9 +142,9 @@ algashop:
   security:
     cors:
       allowedOrigins:
-        - http://admin.algashop.com:4200
+        - http://admin.algashop.local:4200
     cookie:
-      secure: false # HTTPS
+      secure: false #HTTPS
       sameSite: Lax # None, Lax, Strict
       domainName: algashop.local
     csp:
