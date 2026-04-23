@@ -132,7 +132,7 @@ spring:
                 - users:read
                 - users:write
                 - openid
-            require-authorization-consent: true
+            require-authorization-consent: false
             require-proof-key: true #PKCE
             token:
               access-token-time-to-live: 5m
