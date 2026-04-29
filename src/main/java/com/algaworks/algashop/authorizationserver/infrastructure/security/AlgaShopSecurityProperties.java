@@ -26,24 +26,17 @@ public class AlgaShopSecurityProperties {
 
 	@NotNull
 	@Valid
-	private CspProperties csp;
+	private CookieProperties cookie;
 
 	@NotNull
 	@Valid
-	private CookieProperties cookie;
+	private CspProperties csp;
 
 	@Data
 	@NoArgsConstructor
 	public static class CorsProperties {
 		@NotEmpty
 		private List<String> allowedOrigins = new ArrayList<>();
-	}
-
-	@Data
-	@NoArgsConstructor
-	public static class CspProperties {
-		@NotBlank
-		private String policyDirectives;
 	}
 
 	@Data
@@ -55,6 +48,12 @@ public class AlgaShopSecurityProperties {
 		private String domainName;
 		@NotNull
 		private Boolean secure;
+	}
+
+	@Data
+	@NoArgsConstructor
+	public static class CspProperties {
+		private String policyDirectives;
 	}
 
 }

@@ -10,19 +10,18 @@ import org.springframework.session.web.http.DefaultCookieSerializer;
 public class CookieConfig {
 
 	@Bean
-	public CookieSerializer cookieSerializer(AlgaShopSecurityProperties properties) {
-		var serializer = new DefaultCookieSerializer();
+	public CookieSerializer cookieSerializer(AlgaShopSecurityProperties algaShopSecurityProperties) {
+		var properties = algaShopSecurityProperties.getCookie();
+		DefaultCookieSerializer serializer = new DefaultCookieSerializer();
 
-		serializer.setCookieName("JSESSIONID");
+		serializer.setCookieName("SESSION");
 		serializer.setCookiePath("/");
 		serializer.setUseHttpOnlyCookie(true);
 
-		var cookieProperties = properties.getCookie();
-		serializer.setUseSecureCookie(cookieProperties.getSecure());
-		serializer.setSameSite(cookieProperties.getSameSite());
-		serializer.setDomainName(cookieProperties.getDomainName());
+		serializer.setUseSecureCookie(properties.getSecure());
+		serializer.setSameSite(properties.getSameSite());
+		serializer.setDomainName(properties.getDomainName());
 
 		return serializer;
 	}
-
 }
