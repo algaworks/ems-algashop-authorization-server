@@ -11,14 +11,11 @@ import org.springframework.security.oauth2.server.authorization.token.JwtEncodin
 import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
 import org.springframework.stereotype.Component;
 
-import java.util.Set;
-
 @Component
 @RequiredArgsConstructor
 public class JwtTokenCustomizer implements OAuth2TokenCustomizer<JwtEncodingContext> {
 
 	private final OidcUserInfoService oidcUserInfoService;
-	private final ScopePolicyService scopePolicyService;
 
 	@Override
 	public void customize(JwtEncodingContext context) {
@@ -40,14 +37,8 @@ public class JwtTokenCustomizer implements OAuth2TokenCustomizer<JwtEncodingCont
 		OidcUserInfo oidcUserInfo = loadUser(context);
 		String role = oidcUserInfo.getClaimAsString("type");
 
-		String clientId = context.getRegisteredClient().getClientId();
-
-		Set<String> filteredScopes = scopePolicyService.resolveScopes(AuthUserType.valueOf(role),
-				clientId, context.getAuthorizedScopes());
-
 		context.getClaims().subject(oidcUserInfo.getSubject());
 		context.getClaims().claim("role", role);
-		context.getClaims().claims(claim -> claim.put("scope", filteredScopes));
 	}
 
 	private void customizeIdToken(JwtEncodingContext context) {
