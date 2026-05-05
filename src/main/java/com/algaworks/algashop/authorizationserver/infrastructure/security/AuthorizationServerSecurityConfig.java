@@ -99,7 +99,9 @@ public class AuthorizationServerSecurityConfig {
 								"/js/**", "/img/**", "/favicon.ico").permitAll()
 						.anyRequest().authenticated()
 				)
-				.formLogin(c -> c.loginPage("/login").permitAll());
+				.formLogin(c -> c.loginPage("/login")
+						.defaultSuccessUrl(properties.getDefaultRedirectUri())
+						.permitAll());
 		return http.build();
 	}
 
