@@ -53,7 +53,9 @@ public class AuthorizationServerSecurityConfig {
 							.userInfoEndpoint(
 								userInfo -> userInfo.userInfoMapper(oidcUserInfoMapper)))
 						.authorizationEndpoint(endpoint ->
-								endpoint.authenticationProviders(this::customizeAuthenticationProviders))
+								endpoint.authenticationProviders(this::customizeAuthenticationProviders)
+										.consentPage("/oauth2/consent")
+						)
 				)
 				.authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated())
 				.exceptionHandling(
