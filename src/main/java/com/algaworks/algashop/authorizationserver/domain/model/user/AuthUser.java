@@ -72,7 +72,7 @@ public class AuthUser extends AbstractAuditableAggregateRoot<AuthUser> {
 		verifyToken(plainToken, tokenHasher);
 		setPassword(passwordManager.encrypt(plainPassword));
 		cleanVerificationToken();
-		if (isEmailVerified()) {
+		if (!isEmailVerified()) {
 			setEmailVerified(true);
 		}
 	}
