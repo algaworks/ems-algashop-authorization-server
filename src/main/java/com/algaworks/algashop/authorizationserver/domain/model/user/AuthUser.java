@@ -12,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.time.Duration;
 import java.time.OffsetDateTime;
+import java.time.OffsetTime;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -63,6 +64,19 @@ public class AuthUser extends AbstractAuditableAggregateRoot<AuthUser> {
 		return plainToken;
 	}
 
+	public void changePasswordWithToken(String plainToken,
+	                                    String plainPassword,
+	                                    AuthUserPasswordManager passwordManager,
+	                                    VerificationTokenHasher tokenHasher
+	                                    ) {
+		verifyToken(plainToken, tokenHasher);
+		setPassword(passwordManager.encrypt(plainPassword));
+		cleanVerificationToken();
+		if (isEmailVerified()) {
+			setEmailVerified(true);
+		}
+	}
+
 	public boolean isDisabled() {
 		return !isEmailVerified() || !isEnabled();
 	}
@@ -90,6 +104,28 @@ public class AuthUser extends AbstractAuditableAggregateRoot<AuthUser> {
 			throw new DomainException("Cannot change type of a CUSTOMER user");
 		}
 		this.type = type;
+	}
+
+	private void verifyToken(String plainToken, VerificationTokenHasher tokenHasher) {
+		if (!tokenHasher.isEqual(this.verificationToken, plainToken)) {
+			throw new IllegalArgumentException("Invalid token");
+		}
+
+		if (isTokenExpired()) {
+			throw new IllegalStateException("Token has expired");
+		}
+	}
+
+	private boolean isTokenExpired() {
+		if (verificationTokenExpirationDate == null) {
+			return true;
+		}
+		return OffsetDateTime.now().isAfter(verificationTokenExpirationDate);
+	}
+
+	private void cleanVerificationToken() {
+		this.verificationToken = null;
+		this.verificationTokenExpirationDate = null;
 	}
 
 	private void setPassword(String password) {
