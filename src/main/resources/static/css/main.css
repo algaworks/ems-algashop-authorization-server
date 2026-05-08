@@ -151,3 +151,269 @@ form .signup-link a:hover {
 .alert {
     color: red;
 }
+
+/* ============================================
+   CONSENT PAGE STYLES
+   ============================================ */
+
+.scope-item {
+    margin-bottom: 15px;
+    padding: 12px 15px;
+    background: #f9f9f9;
+    border-radius: 5px;
+    border-left: 3px solid #D10024;
+}
+
+.scope-item input[type="checkbox"] {
+    margin-right: 10px;
+    cursor: pointer;
+    accent-color: #D10024;
+}
+
+.scope-item label {
+    font-weight: 600;
+    cursor: pointer;
+    margin-bottom: 5px;
+}
+
+.scope-item p {
+    margin: 5px 0 0 0;
+    font-size: 14px;
+    color: #666;
+}
+
+.scope-item input[type="checkbox"]:disabled {
+    opacity: 0.6;
+}
+
+.scope-item input[type="checkbox"]:disabled + label {
+    opacity: 0.7;
+}
+
+.info-text {
+    text-align: center;
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 15px;
+    padding: 10px;
+}
+
+.warning-box {
+    background: #fff3cd;
+    border: 1px solid #ffc107;
+    border-radius: 5px;
+    padding: 12px;
+    margin-bottom: 15px;
+    color: #856404;
+    font-size: 14px;
+}
+
+.scopes-container {
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+.scopes-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.scopes-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.scopes-container::-webkit-scrollbar-thumb {
+    background: #D10024;
+    border-radius: 3px;
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.submit-btn {
+    flex: 1;
+    min-width: 150px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+    background: #D10024;
+    border: 1px solid #D10024;
+    cursor: pointer;
+    padding: 12px 20px;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.submit-btn:hover {
+    background: #b8001f;
+    border-color: #b8001f;
+    box-shadow: 0px 2px 8px rgba(209, 0, 36, 0.3);
+}
+
+.submit-btn:active {
+    transform: translateY(1px);
+}
+
+.cancel-btn {
+    flex: 1;
+    min-width: 150px;
+    color: #333;
+    font-size: 14px;
+    font-weight: 500;
+    background: #e0e0e0;
+    border: 1px solid #bbb;
+    cursor: pointer;
+    padding: 12px 20px;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.cancel-btn:hover {
+    background: #d0d0d0;
+    border-color: #999;
+}
+
+.cancel-btn:active {
+    transform: translateY(1px);
+}
+
+.footer-text {
+    text-align: center;
+    font-size: 12px;
+    color: #666;
+    margin-top: 20px;
+    padding: 15px 0;
+    border-top: 1px solid #e0e0e0;
+}
+
+/* ============================================
+   FORGOT PASSWORD FORM STYLES
+   ============================================ */
+
+.back-link {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.back-link a {
+    color: #D10024;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.back-link a:hover {
+    text-decoration: underline;
+}
+
+/* ============================================
+   MESSAGE PAGES STYLES
+   ============================================ */
+
+.message-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+    padding: 20px;
+    text-align: center;
+}
+
+.message-content p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #333;
+    margin: 0;
+}
+
+.message-icon {
+    font-size: 48px;
+    margin-bottom: 20px;
+    color: #D10024;
+}
+
+.message-success {
+    color: #28a745;
+}
+
+.message-error {
+    color: #dc3545;
+}
+
+/* Password message specific back-link styling */
+.message-content .back-link {
+    margin-top: 30px;
+}
+
+.message-content .back-link a {
+    padding: 10px 20px;
+    border: 1px solid #D10024;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.message-content .back-link a:hover {
+    background: #D10024;
+    color: white;
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+@media (max-width: 480px) {
+    .container {
+        width: 100%;
+        padding: 0 10px;
+        margin: 10px auto;
+    }
+
+    .wrapper {
+        border-radius: 0;
+    }
+
+    .wrapper .title {
+        height: 80px;
+        font-size: 24px;
+    }
+
+    .scope-item {
+        padding: 10px 12px;
+    }
+
+    .info-text {
+        font-size: 13px;
+        margin-bottom: 15px;
+    }
+
+    .button-group {
+        flex-direction: column;
+    }
+
+    .submit-btn,
+    .cancel-btn {
+        width: 100%;
+        min-width: unset;
+    }
+
+    .message-content {
+        min-height: 150px;
+        padding: 15px;
+    }
+
+    .message-icon {
+        font-size: 36px;
+    }
+
+    .message-content p {
+        font-size: 14px;
+    }
+}
