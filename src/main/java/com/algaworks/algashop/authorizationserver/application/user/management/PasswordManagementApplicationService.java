@@ -1,6 +1,7 @@
 package com.algaworks.algashop.authorizationserver.application.user.management;
 
 import com.algaworks.algashop.authorizationserver.application.user.UserAccountProperties;
+import com.algaworks.algashop.authorizationserver.application.user.mail.AuthUserMailSender;
 import com.algaworks.algashop.authorizationserver.application.user.query.AuthUserNotFoundException;
 import com.algaworks.algashop.authorizationserver.domain.model.user.AuthUser;
 import com.algaworks.algashop.authorizationserver.domain.model.user.AuthUserPasswordManager;
@@ -23,6 +24,8 @@ public class PasswordManagementApplicationService {
 	private final AuthUserPasswordManager passwordManager;
 	private final VerificationTokenHasher tokenHasher;
 
+	private final AuthUserMailSender authUserMailSender;
+
 	public void changePasswordWithToken(String plainToken, String newPlainPassword) {
 		String hash = tokenHasher.hash(plainToken);
 		AuthUser authUser = authUserRepository.findByVerificationToken(hash)
@@ -44,7 +47,7 @@ public class PasswordManagementApplicationService {
 		String plainToken = authUser.generateVerificationToken(
 				userAccountProperties.getToken().getPasswordResetTtl(), tokenHasher);
 
-		System.out.println("Plain token: " + plainToken);
+		authUserMailSender.sendPasswordChangeEmail(authUser, plainToken);
 
 		authUserRepository.save(authUser);
 	}
