@@ -106,7 +106,7 @@ spring:
               scopes:
                 - products:read
                 - categories:read
-                - users:write
+                - customers:write
             token:
               access-token-time-to-live: 15m
           algashop-admin-web-client:
