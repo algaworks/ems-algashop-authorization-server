@@ -8,13 +8,11 @@ import com.algaworks.algashop.authorizationserver.application.user.query.AuthUse
 import com.algaworks.algashop.authorizationserver.domain.model.user.AuthUser;
 import com.algaworks.algashop.authorizationserver.domain.model.user.AuthUserPasswordManager;
 import com.algaworks.algashop.authorizationserver.domain.model.user.AuthUserRepository;
+import com.algaworks.algashop.authorizationserver.domain.model.user.AuthUserType;
 import com.algaworks.algashop.authorizationserver.domain.model.user.VerificationTokenHasher;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.core.parameters.P;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -69,6 +67,19 @@ public class AuthUserManagementApplicationService {
 		return AuthUserOutput.from(authUserRepository.save(user));
 	}
 
+	public AuthUserOutput update(UUID userId, MyUserUpdateInput input) {
+		AuthUser user = authUserRepository.findById(userId)
+				.orElseThrow(() -> new AuthUserNotFoundException(userId));
+
+		if (!securityCheck.canEditUser(user.getType(), user.getId())) {
+			throw new AccessDeniedException("Cannot edit user");
+		}
+
+		user.setName(input.getName());
+
+		return AuthUserOutput.from(authUserRepository.save(user));
+	}
+
 	private void verifyCanEditUser(AuthUser authUser, AuthUserUpdateInput input) {
 		if (!securityCheck.canEditUser(authUser.getType(), authUser.getId())) {
 			throw new AccessDeniedException("Cannot edit user of type " + authUser.getType());
@@ -82,8 +93,18 @@ public class AuthUserManagementApplicationService {
 	public void delete(UUID userId) {
 		AuthUser user = authUserRepository.findById(userId)
 				.orElseThrow(() -> new AuthUserNotFoundException(userId));
+
+		verifyCanArchiveOwnUser(user);
+
 		user.anonymize();
 		authUserRepository.save(user);
+	}
+
+	private void verifyCanArchiveOwnUser(AuthUser user) {
+		if (securityCheck.getAuthenticatedUserId().equals(user.getId()) &&
+				user.getType() != AuthUserType.CUSTOMER) {
+			throw new AccessDeniedException("Only CUSTOMER users can delete their own profile");
+		}
 	}
 
 }
