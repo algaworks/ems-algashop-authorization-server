@@ -3,6 +3,7 @@ spring:
     import:
       - aws-secretsmanager:/secret/algashop/authorization-server/database?prefix=auth.secrets.datasource.
       - aws-parameterstore:/config/algashop/authorization-server?prefix=auth.params
+      - aws-parameterstore:/config/algashop/shared?prefix=shared.params
   cloud:
     aws:
       region:
@@ -28,7 +29,7 @@ spring:
   security:
     oauth2:
       authorizationserver:
-        issuer: ${auth.params.issuer}
+        issuer: ${shared.params.auth-server-url}
         client:
           algashop-test-client:
             registration:
