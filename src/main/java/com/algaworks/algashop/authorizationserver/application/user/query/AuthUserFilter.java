@@ -13,6 +13,6 @@ public class AuthUserFilter {
     private AuthUserType type;
     private int page = 0;
     private int size = 15;
-    private String sort = "name";
-    private Sort.Direction direction = Sort.Direction.ASC;
+    private String sortByProperty = "name";
+    private Sort.Direction sortDirection = Sort.Direction.ASC;
 }

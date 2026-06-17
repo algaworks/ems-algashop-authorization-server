@@ -1,18 +1,22 @@
 package com.algaworks.algashop.authorizationserver.infrastructure.persistence;
 
+import com.algaworks.algashop.authorizationserver.application.security.SecurityChecks;
 import com.algaworks.algashop.authorizationserver.application.user.query.*;
 import com.algaworks.algashop.authorizationserver.domain.model.user.AuthUser;
 import com.algaworks.algashop.authorizationserver.domain.model.user.AuthUserRepository;
+import com.algaworks.algashop.authorizationserver.domain.model.user.AuthUserType;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -22,10 +26,17 @@ public class AuthUserQueryServiceImpl implements AuthUserQueryService {
 
 	private final AuthUserRepository authUserRepository;
 	private final EntityManager entityManager;
+	private final SecurityChecks securityChecks;
 
 	@Override
 	public AuthUserOutput findById(UUID userId) {
 		return authUserRepository.findById(userId)
+				.flatMap(authUser -> {
+					if (!securityChecks.canViewUser(authUser.getType(), authUser.getId())) {
+						throw new AccessDeniedException("Cannot view user of type " + authUser.getType());
+					}
+					return Optional.of(authUser);
+				})
 				.map(AuthUserOutput::from)
 				.orElseThrow(() -> new AuthUserNotFoundException(userId));
 	}
@@ -89,13 +100,15 @@ public class AuthUserQueryServiceImpl implements AuthUserQueryService {
 			predicates.add(builder.equal(root.get("type"), filter.getType()));
 		}
 
+		predicates.add(builder.not(builder.equal(root.get("type"), AuthUserType.CUSTOMER)));
+
 		return predicates.toArray(new Predicate[0]);
 	}
 
 	private Order toSortOrder(CriteriaBuilder builder, Root<AuthUser> root, AuthUserFilter filter) {
-		return filter.getDirection().isAscending()
-				? builder.asc(root.get(filter.getSort()))
-				: builder.desc(root.get(filter.getSort()));
+		return filter.getSortDirection().isAscending()
+				? builder.asc(root.get(filter.getSortByProperty().toLowerCase()))
+				: builder.desc(root.get(filter.getSortByProperty().toLowerCase()));
 	}
 
 }
