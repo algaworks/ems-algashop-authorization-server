@@ -75,7 +75,7 @@ spring:
               scopes:
                 - products:read
             token:
-              access-token-time-to-live: 5m
+              access-token-time-to-live: 15m
               access-token-format: self-contained # JWT
           algashop-ecommerce-web-client:
             registration:
@@ -103,7 +103,7 @@ spring:
             require-authorization-consent: false
             require-proof-key: false #PKCE
             token:
-              access-token-time-to-live: 5m
+              access-token-time-to-live: 15m
               authorization-code-time-to-live: 10m
               refresh-token-time-to-live: 1h
               reuse-refresh-tokens: false
@@ -148,8 +148,8 @@ spring:
             require-authorization-consent: false
             require-proof-key: true #PKCE
             token:
-              access-token-time-to-live: 5m
-              authorization-code-time-to-live: 2m
+              access-token-time-to-live: 15m
+              authorization-code-time-to-live: 5m
 
 algashop:
   user-account:
