@@ -61,6 +61,9 @@ spring:
                 - shopping-carts:write
                 - users:read
                 - users:write
+                - emails:send
+                - email-templates:read
+                - email-templates:write
             token:
               access-token-time-to-live: 1h
               access-token-format: self-contained # JWT
@@ -74,6 +77,21 @@ spring:
               client-secret: ${auth.params.clients.algashop-ordering-service.secret}
               scopes:
                 - products:read
+            token:
+              access-token-time-to-live: 1h
+              access-token-format: self-contained # JWT
+          algashop-notifications-service-client:
+            registration:
+              client-id: algashop-notifications-service
+              authorization-grant-types:
+                - client_credentials
+              client-authentication-methods:
+                - client_secret_basic
+              client-secret: ${auth.params.clients.algashop-notifications-service.secret}
+              scopes:
+                - emails:send
+                - email-templates:read
+                - email-templates:write
             token:
               access-token-time-to-live: 1h
               access-token-format: self-contained # JWT
